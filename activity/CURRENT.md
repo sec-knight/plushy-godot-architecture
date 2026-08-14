@@ -1,6 +1,6 @@
 # Current
 
-**Last session:** `activity/2026-08-13-architecture-scaffold.md`
+**Last session:** `activity/2026-08-13-implementation-plan.md`
 
 ## Where things stand
 
@@ -15,10 +15,18 @@ A routing defect was diagnosed and recorded in
 fixed: `projects.yaml` and the Grimoire template now record HTTPS URLs only. No
 workaround is needed when following the map.
 
+The shipped demo source was read for the first time this session, from
+`sneaker.games/plushy/`. It is materially further along than
+`CURRENT-DEMO-FEATURE-MAP.md` describes — three levels, three enemy kinds with
+variants, a boss phase, pickups. The feature map was written from memory of the
+demo, not from its source. See `activity/2026-08-13-implementation-plan.md`.
+
 ## Next action
 
-Begin milestone 1 in `plushy-godot-source`: a `CharacterBody2D` player driven by
-named Godot input actions, with move, attack, and dodge.
+M0, the export gate: move to the standard (non-.NET) Godot 4.7 build, drop the
+`[dotnet]` section from `project.godot`, and export the empty project to web and
+open it on a phone before any gameplay work. The player controller is M2, not
+first — M0 and M1 (the audio spike) are risk gates and are cheap to fail.
 
 ## Do not retry
 
