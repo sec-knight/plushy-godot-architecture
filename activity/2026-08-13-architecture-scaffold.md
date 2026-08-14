@@ -1,4 +1,4 @@
-# Session: Stand up Grimoire structure in the architecture repository
+# Session: Stand up Grimoire structure; diagnose SSH routing defect
 
 **Date:** 2026-08-13
 **Environment:** Claude Code
@@ -7,6 +7,9 @@
 
 Make the plushy-godot architecture repository conform to the Grimoire protocol so
 a later session can resume the project without depending on this conversation.
+
+Second half of the session turned to the SSH remote failure found along the way,
+which proved to be a routing-map defect rather than a plushy-godot one.
 
 ## Context Used
 
@@ -30,6 +33,17 @@ a later session can resume the project without depending on this conversation.
 - Wrote `architecture/intent.md` and `architecture/current-state.md` from the
   feature map and the observed state of both repositories.
 - Wrote this record and `activity/CURRENT.md`.
+- Committed in two parts per protocol — `d248b69` `architecture:` and `9ba9405`
+  `activity:` — then `298f710` correcting this record's own commit state. Pushed.
+
+### SSH investigation — work landed in `black-clover`
+
+- Added `findings/` to the personal Grimoire with a `README.md` scoping it to
+  routing and access infrastructure only, since `black-clover/AGENTS.md` warns
+  against that repository growing.
+- Wrote `findings/2026-08-13-ssh-remotes-unusable.md`, then revised it once the
+  diagnosis sharpened. Commits `b3b2e19` and `2f6e28c`, both pushed.
+- Enumerated every SSH reference across the local repositories and `~/.ssh`.
 
 ## Findings
 
@@ -47,6 +61,26 @@ a later session can resume the project without depending on this conversation.
   or assets. Milestone 1 is entirely unstarted.
 - The archive repository was not cloned or inspected this session.
 
+### On the SSH failure — first diagnosis was wrong
+
+- Initially reported as "no usable key." That was incorrect. The real cause:
+  `~/.ssh/config` defines only `wizard` and `familiar`, and the sole key
+  `familiar_codex_sprints` is pinned to the `familiar` alias with
+  `IdentitiesOnly yes`. No `Host github.com` entry, no default-named key.
+  GitHub SSH was never configured here — nothing is revoked or broken.
+- Root cause is upstream of `black-clover`: the SSH URL pattern comes from
+  `grimoire/templates/personal-grimoire/projects.yaml`. Fixing only the map
+  reintroduces the defect at the next seeding. Note that `grimoire` is the
+  protocol/template repository, distinct from `black-clover`, the routing map.
+- The `wizard` / `familiar` hosts are leftovers from the earlier
+  context-management project; that server is retired and documentation now flows
+  through GitHub. All seven local repositories already use HTTPS origins, and no
+  `url.*.insteadOf` rewrites exist. `projects.yaml` is the only artifact on the
+  machine still asserting SSH.
+- `known_hosts` contains `familiar.taila1d25f.ts.net`. The leftover key may still
+  be a live credential to that Tailscale node, so `~/.ssh` cleanup is not
+  obviously safe.
+
 ## Result
 
 The architecture repository now satisfies the protocol. `resume` against
@@ -61,9 +95,10 @@ Committed as `d248b69` (architecture) and `9ba9405` (activity), pushed to
 
 Not promoted; recorded for deliberate decision later.
 
-- The SSH-vs-HTTPS gap may belong in the personal Grimoire rather than here,
-  since it affects every project routed through `projects.yaml`, not just this
-  one. It is currently noted in `architecture/current-state.md`.
+- The SSH-vs-HTTPS gap belongs in the personal Grimoire, not here — resolved
+  during the session by adding `black-clover/findings/`. The note in
+  `architecture/current-state.md` is now a duplicate pointer and can be trimmed
+  to a reference once the underlying issue is fixed.
 - `architecture/decisions.md` is not yet warranted — no decision has been
   superseded. Create it at the first real reversal, not before.
 
@@ -73,13 +108,24 @@ Not promoted; recorded for deliberate decision later.
   repository so the behavioral baseline survives independently of the running
   demo?
 - What does the archive repository currently contain?
+- Is the `familiar` Tailscale node still running, and is
+  `familiar_codex_sprints` still a live credential to it?
 
 ## Continuation
 
 **Project:** plushy-godot
 **Architecture:** `sec-knight/plushy-godot-architecture` (local clone at
 `C:/Users/Administrator/Documents/GitHub/plushy-godot-architecture`)
-**State:** Scaffold committed and pushed to `origin/main`.
+**State:** Scaffold committed and pushed to `origin/main`. SSH defect diagnosed
+and recorded in `black-clover/findings/`; the fix is decided but **not applied**.
 **Next action:** Begin milestone 1 in `plushy-godot-source` with the
 `CharacterBody2D` player and input actions.
-**Ruled out:** SSH remotes from this machine.
+
+**Pending, outside this repository** — rewrite the three SSH URLs in
+`black-clover/projects.yaml` and the five in
+`grimoire/templates/personal-grimoire/projects.yaml` to HTTPS. Then clear the
+stale SSH notes in `architecture/current-state.md` and `activity/CURRENT.md`.
+
+**Ruled out:** SSH remotes from this machine. Generating a GitHub SSH key —
+no remaining SSH consumers to justify a second auth path. Recording both URL
+forms in the map — hedges for an audience that does not exist.
