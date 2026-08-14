@@ -43,9 +43,10 @@ Not started. From `CURRENT-DEMO-FEATURE-MAP.md`, all ten criteria remain open:
 
 ## Known environment facts
 
-- The SSH remotes recorded in the personal Grimoire's `projects.yaml` are not
-  usable from the current Windows machine; HTTPS remotes work. This is a local
-  credential gap, not a repository problem.
+- All remotes are HTTPS. GitHub SSH is not configured on this Windows machine
+  and is not going to be; the personal Grimoire's `projects.yaml` once recorded
+  SSH URLs and was corrected on 2026-08-13. See
+  `black-clover/findings/2026-08-13-ssh-remotes-unusable.md`.
 - The archive repository has not been cloned or inspected.
 
 ## Open questions
