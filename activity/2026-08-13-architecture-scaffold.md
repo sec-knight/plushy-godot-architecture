@@ -54,7 +54,8 @@ The architecture repository now satisfies the protocol. `resume` against
 pointer, and one dated activity record.
 
 Verification state: file structure confirmed on disk against the template.
-Nothing was committed or pushed — see Continuation.
+Committed as `d248b69` (architecture) and `9ba9405` (activity), pushed to
+`origin/main`.
 
 ## Possible Architecture Changes
 
@@ -78,8 +79,7 @@ Not promoted; recorded for deliberate decision later.
 **Project:** plushy-godot
 **Architecture:** `sec-knight/plushy-godot-architecture` (local clone at
 `C:/Users/Administrator/Documents/GitHub/plushy-godot-architecture`)
-**State:** Scaffold written to the working tree, uncommitted.
-**Next action:** Commit as `architecture: plushy-godot — Grimoire structure` and
-push, then begin milestone 1 in `plushy-godot-source` with the `CharacterBody2D`
-player and input actions.
+**State:** Scaffold committed and pushed to `origin/main`.
+**Next action:** Begin milestone 1 in `plushy-godot-source` with the
+`CharacterBody2D` player and input actions.
 **Ruled out:** SSH remotes from this machine.
